@@ -1,8 +1,8 @@
 package com.sparta.dtogram.user.controller;
 
 
+import com.sparta.dtogram.user.dto.ProfileResponseDto;
 import com.sparta.dtogram.user.dto.SignupRequestDto;
-import com.sparta.dtogram.user.entity.User;
 import com.sparta.dtogram.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -54,19 +54,19 @@ public class UserController {
 
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id){
-        return ResponseEntity.ok().body(userService.getUser(id));
+    public ResponseEntity<ProfileResponseDto> getUser(@PathVariable Long id){
+        return ResponseEntity.ok().body(new ProfileResponseDto(userService.getUser(id)));
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<ProfileResponseDto>> getAllUsers(){
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-    @GetMapping("/user/{nickname}") //오버로딩
-    public ResponseEntity<List<User>> getAllUsers(@PathVariable String nickname){
-        return ResponseEntity.ok().body(userService.getAllUsers(nickname));
-    }
+//    @GetMapping("/user/nickname") //검색기능에 맞춰 수정 예정
+//    public ResponseEntity<List<ProfileResponseDto>> getAllUsers(@RequestParam String nickname){
+//        return ResponseEntity.ok().body(userService.getAllUsers(nickname));
+//    }
 
 
 }
