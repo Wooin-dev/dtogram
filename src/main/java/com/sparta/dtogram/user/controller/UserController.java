@@ -1,6 +1,5 @@
 package com.sparta.dtogram.user.controller;
 
-
 import com.sparta.dtogram.common.security.UserDetailsImpl;
 import com.sparta.dtogram.profile.dto.ProfileResponseDto;
 import com.sparta.dtogram.user.dto.ProfileResponseDto;
@@ -11,7 +10,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/api")
 public class UserController {
 
@@ -27,16 +25,6 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/user/login-page")
-    public String loginPage() {
-        return "login";
-    }
-
-    @GetMapping("/user/signup")
-    public String signupPage() {
-        return "signup";
     }
 
     @PostMapping("/user/signup")
@@ -57,11 +45,6 @@ public class UserController {
     @GetMapping("/user/info")
     public ResponseEntity<UserInfoDto> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(userService.getUserInfo(userDetails.getUser()));
-    }
-
-    @GetMapping("/user/{id}")
-    public ResponseEntity<ProfileResponseDto> getUser(@PathVariable Long id){
-        return ResponseEntity.ok().body(new ProfileResponseDto(userService.getUser(id)));
     }
 
     @GetMapping("/user")

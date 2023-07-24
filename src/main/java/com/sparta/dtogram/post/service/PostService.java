@@ -1,5 +1,6 @@
 package com.sparta.dtogram.post.service;
 
+import com.sparta.dtogram.common.service.S3Uploader;
 import com.sparta.dtogram.post.dto.PostRequestDto;
 import com.sparta.dtogram.post.dto.PostResponseDto;
 import com.sparta.dtogram.post.dto.PostsResponseDto;
@@ -9,18 +10,22 @@ import com.sparta.dtogram.post.entity.PostTag;
 import com.sparta.dtogram.post.repository.PostLikeRepository;
 import com.sparta.dtogram.post.repository.PostRepository;
 import com.sparta.dtogram.post.repository.PostTagRepository;
-import com.sparta.dtogram.reply.dto.RepliesResponseDto;
 import com.sparta.dtogram.tag.entity.Tag;
 import com.sparta.dtogram.tag.repository.TagRepository;
 import com.sparta.dtogram.user.entity.User;
+import com.sparta.dtogram.user.entity.UserRoleEnum;
 import com.sparta.dtogram.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
@@ -35,13 +40,17 @@ public class PostService {
     private final PostTagRepository postTagRepository;
     private final PostLikeRepository postLikeRepository;
 
+    @Autowired
+    private S3Uploader s3Uploader;
+
     // 게시글 생성
-    public PostResponseDto createPost(PostRequestDto requestDto, User user) {
+    public PostResponseDto createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
         log.info("게시글 생성 시도");
 
         try {
             log.info("게시글 생성 성공");
-            Post post = postRepository.save(new Post(requestDto, user));
+            String storedFileName = s3Uploader.upload(multipartFile, "postFile");
+            Post post = postRepository.save(new Post(requestDto, user, storedFileName));
             return new PostResponseDto(post);
         } catch (RejectedExecutionException e) {
             log.error("게시글 생성 실패", e);
@@ -67,11 +76,29 @@ public class PostService {
         return new PostsResponseDto(posts);
     }
 
+    @Transactional(readOnly = true)
+    public PostsResponseDto getPostsByUser(Post post) {
+        List<Post> posts = postRepository.findAllByOrderByModifiedAtDesc();
+        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+        for(int i = 0; i < posts.size(); i++){
+            boolean isLikePost = postLikeRepository.findByUserAndPost(post.getUser(), post).isPresent();
+            postResponseDtoList.add(new PostResponseDto(post, isLikePost));
+        }
+
+        return new PostsResponseDto(postResponseDtoList);
+    }
+
     @Transactional
-    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
+    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException{
         Post post = findPost(id);
-        if (post.getUser().getNickname().equals(user.getNickname())) {
-            post.updatePost(requestDto);
+        String storedFileName = "";
+        if (Objects.equals(post.getUser().getId(), user.getId()) || user.getRole().equals(UserRoleEnum.ADMIN)) {
+            if (multipartFile.isEmpty()) {
+                storedFileName = post.getMultiMediaUrl();
+            } else {
+                storedFileName = s3Uploader.upload(multipartFile, "postFile");
+            }
+            post.updatePost(requestDto, storedFileName);
         } else {
             throw new RuntimeException("Exception ! 작성자가 아닌 게시글 수정 시도 감지");
         }
@@ -81,7 +108,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long id, User user) {
         Post post = findPost(id);
-        if (post.getUser().getNickname().equals(user.getNickname())) {
+        if (Objects.equals(post.getUser().getId(), user.getId()) || user.getRole().equals(UserRoleEnum.ADMIN)) {
             postRepository.delete(post);
         } else {
             throw new RuntimeException("Exception ! 작성자가 아닌 게시글 삭제 시도 감지");

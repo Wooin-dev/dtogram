@@ -11,6 +11,13 @@ body {
     margin: 0;
 }
 
+
+.header a {
+    text-decoration-line: none;
+    text-decoration: white;
+    color: chartreuse;
+}
+
 .header-style {
     text-decoration: none;
     color: white;
@@ -32,12 +39,19 @@ body {
     font-size: 15px;
     font-weight: bold;
     color: white;
-    display: flex;
     justify-content: flex-end;
     margin-top: 25px;
     margin-left: 30px;
     margin-right: 30px;
     padding-right: 10px;
+}
+
+.header-auth > div {
+    display: flex;
+}
+
+.header-auth a {
+    margin-left: 8px;
 }
 
 .header-login,
@@ -75,49 +89,62 @@ body {
     margin-right: 10px;
 }
 
-
-#post-update-box {
-     position: fixed;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
- }
-
-/*.post-container {*/
-/*    max-width: 600px;*/
-/*    margin: 0 auto;*/
-/*    padding: 20px;*/
-/*    background-color: #ffffff;*/
-/*    border-radius: 10px;*/
-/*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*}*/
-
+/*게시글 등록*/
 .post-register-box {
-    width: 50%;
-    margin-top: 4%;
-    margin-left: 25%;
-    margin-bottom: 30px;
-    padding: 10px;
-    background-color: #ffffff;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 10%;
+    padding-top: 2%;
     border: 1px solid #6a6259;
-    border-radius: 5px;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
 }
 
 .postDto-box {
-    width: 50%;
-    margin-left: 25%;
+    width: 80%;
+    margin-left: 10%;
     margin-bottom: 5%;
-    padding: 10px;
     border: 1px solid #6a6259;
-    background-color: #ffffff;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
 }
 
 .postDto-header {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 10px;
+}
+
+.postDto-user {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 30%;
+    height: 30%;
+    flex: 0 0 auto;
+}
+
+.postDto-profileimage {
+    margin: 7%;
+    padding: 2%;
+    border-radius: 50%;
+    border: 3px solid chartreuse;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    height: 30%;
+    object-fit: cover;
+}
+
+.postDto-nickname,
+.postDto-createdAt,
+.postDto-modifiedAt,
+.postDto-extra-btn {
+    flex: 1 1 auto;
 }
 
 .postDto-nickname {
@@ -153,6 +180,11 @@ body {
 .postDto-content {
     font-size: 14px;
     line-height: 1.5;
+    text-align: center;
+}
+
+.postDto-photo {
+    width: 100%;
 }
 
 .postDto-tags {
@@ -162,12 +194,15 @@ body {
 }
 
 .postDto-footer {
+    color: white;
+    font-weight: bold;
     display: flex;
     align-items: center;
     margin-top: 10px;
 }
 
 .post-like-icon {
+    width: 7%;
     font-size: 18px;
     color: #e74c3c;
     cursor: pointer;
@@ -180,6 +215,29 @@ body {
     margin-right: 10px;
 }
 
+#post-update-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.post-update-box {
+    width: 50%;
+    margin-top: 4%;
+    margin-left: 25%;
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #6a6259;
+    border-radius: 5px;
+}
+
+.postDto-extra-btn {
+    font-weight: bold;
+    color: chartreuse;
+}
+
 .postDto-reply-btn {
     font-size: 12px;
     color: #888888;
@@ -188,11 +246,15 @@ body {
 
 .replyDto-btn,
 #post-register-submit {
+    width: 100%;
     padding: 8px 16px;
-    font-size: 12px;
-    background-color: gainsboro;
+    font-size: 15px;
+    background-color: black;
+    color: chartreuse;
+    font-weight: bold;
     border: none;
     border-radius: 4px;
+    margin-top: 20px;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -203,11 +265,23 @@ body {
     background-color: dimgrey;
 }
 
-.replyDto-updateInput,
+.replyDto-content {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.replyDto-input {
+    margin-left: 10%;
+}
+
+.replyDto-input,
 .post-register-input,
 .post-register-element {
+    width: 80%;
     padding: 12px 16px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    background-color: black;
+    color: white;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -216,15 +290,22 @@ body {
     transition: border-color 0.2s ease;
 }
 
-.replyDto-updateInput:focus,
-.post-register-input:focus
+.replyDto-input:focus,
+.post-register-input:focus,
 .post-register-element:focus {
-    border-color: #007bff;
+    border-color: chartreuse;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
 }
 
-.replyDto-like-unlike {
-    display: inline-block;
+#replyDto-like {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 5%;
+}
+
+.replyDto-like-unlike-${replyDto.id} {
+    cursor: pointer;
+    margin-right: 5px; /* Add some space between the icon and text */
 }
 
 .replyDto-replyLike {
@@ -233,4 +314,141 @@ body {
     margin-right: 10px;
     display: inline-block;
     margin-left: 5px;
+}
+
+.replyDto-updateInput {
+    width: 80%;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    color: black;
+    background-color: white;
+    margin-left: 8%;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.replyDto-updateInput:focus {
+    border-color: chartreuse;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+
+.replyDto-extra-btn {
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 12px;
+    background-color: black;
+    color: chartreuse;
+    font-weight: bold;
+    font-size: 15px;
+    border-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.replyDto-extra-btn:hover {
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 12px;
+    background-color: #d4d4d4;
+    color: black;
+    font-weight: bold;
+    font-size: 15px;
+    border-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.replyDto-updateInput {
+    width: 80%;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    color: black;
+    background-color: white;
+    margin-left: 8%;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.replyDto-updateInput:focus {
+    border-color: chartreuse;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+
+
+.profileDto-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.profileDto-photo {
+    width: 300px;
+    height: 300px;
+    background-color: black;
+    position: relative;
+    margin: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.profile-photo-wrapper {
+     display: flex;
+     justify-content: space-between;
+ }
+
+.profileDto-photo-image {
+    width: 98%;
+    height: 98%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: #03C75A 3px solid;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.image-edit-btns {
+    display: flex;
+    justify-content: left;
+    position: absolute;
+}
+
+.image-edit-btns input,
+.image-edit-btns button {
+    margin-right: 8px;
+}
+
+.profileDto-intro {
+    width: 33%;
+    height: 48%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#profileForm {
+    width: 100%;
+}
+
+#profileForm input {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+#info-edit-btns,
+#profile-edit-btns,
+#password-edit-btns {
+    display: flex;
+    justify-content: left;
+    margin-right: 2px;
 }

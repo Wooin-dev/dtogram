@@ -28,27 +28,43 @@ public class Post extends Timestamped {
     @Column(nullable = false, length = 500)
     private String content;
 
+    @Column
+    private String multiMediaUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @Column
+    private boolean isLikedPost;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL)
     private List<Reply> replies = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLike> postLikes = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<PostTag> postTags = new ArrayList<>();
 
-    public Post(PostRequestDto requestDto, User user) {
+    public Post(PostRequestDto requestDto, User user, String multiMediaUrl) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.user = user;
+        this.multiMediaUrl = multiMediaUrl;
     }
 
-    public void updatePost(PostRequestDto requestDto) {
+    public Post(Long postId, PostRequestDto requestDto, User user, String multiMediaUrl) {
+        this.id = postId;
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
+        this.user = user;
+        this.multiMediaUrl = multiMediaUrl;
+    }
+
+    public void updatePost(PostRequestDto requestDto, String multiMediaUrl) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.multiMediaUrl = multiMediaUrl;
     }
 }

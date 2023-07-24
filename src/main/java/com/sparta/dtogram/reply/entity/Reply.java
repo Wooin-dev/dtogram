@@ -11,7 +11,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Getter
@@ -49,6 +48,14 @@ public class Reply extends Timestamped {
         this.content = requestDto.getContent();
     }
 
+    public boolean isLikedReply() {
+        for (ReplyLike replyLike : replyLikes) {
+            if (replyLike.getUser().equals(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public void registerReplyLike(ReplyLike replyLike) {
         this.replyLikes.add(replyLike);
     }
